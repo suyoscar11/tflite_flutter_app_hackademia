@@ -54,15 +54,41 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  loadModel() async {
+    await Tflite.loadModel(model: '', labels: '');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadCamera();
+    loadModel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Finally, some Flutter'),
-      ),
-      body: Container(
-        child: Text('Container Datasets'),
-      ),
-    );
+        appBar: AppBar(
+          title: Text('Finally, some Flutter'),
+        ),
+        body: Column(
+          children: [
+            Padding(padding: EdgeInsets.all(20)),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.7,
+              width: MediaQuery.of(context).size.width,
+              child: !cameraController!.value.isInitialized
+                  ? Container()
+                  : AspectRatio(
+                      aspectRatio: cameraController!.value.aspectRatio,
+                      child: CameraPreview(cameraController!),
+                    ),
+            ),
+            Text(
+              output,
+              style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            )
+          ],
+        ));
   }
 }
