@@ -1,2 +1,2 @@
-0 Sleepy
-1 Nodding Head
+ Sleepy
+ Nodding Head

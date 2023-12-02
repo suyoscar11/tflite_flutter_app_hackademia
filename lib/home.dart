@@ -34,7 +34,6 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     } else {
       // Handle camera permission denial
-      print('Camera permission denied');
     }
   }
 
@@ -62,8 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   loadModel() async {
     await Tflite.loadModel(
-      model: 'assets/model_unquant.tflite',
-      labels: 'assets/label.txt',
+      model: 'assets/modals/model_unquant.tflite',
+      labels: 'assets/modals/label.txt',
     );
   }
 
@@ -92,17 +91,26 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             height: MediaQuery.of(context).size.height * 0.7,
             width: MediaQuery.of(context).size.width,
-            child: !cameraController!.value.isInitialized
-                ? Container()
-                : AspectRatio(
+            child: cameraController != null &&
+                    cameraController!.value.isInitialized
+                ? AspectRatio(
                     aspectRatio: cameraController!.value.aspectRatio,
                     child: CameraPreview(cameraController!),
+                  )
+                : Container(
+                    // Handle the case when camera is not initialized
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   ),
           ),
           Text(
             output,
             style: const TextStyle(
-                fontSize: 25, fontWeight: FontWeight.bold, color: Colors.red),
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
           ),
         ],
       ),
